@@ -1,0 +1,49 @@
+{% extends "ld/layout.jinja2" %}
+{% import "ld/lib/sparql_main.jinja2" as spql with context %}
+{% import "ld/lib/social.jinja2" as social with context %}
+
+{% block body %}
+
+{% set post = graph.queryAsync(
+  spql.q_social_post, initBindings={'uri': rscUri}) | first %}
+
+{% set replies = graph.queryAsync(spql.q_rsc_replies, initBindings={'rsc': rscUri}) %}
+{% set likes = graph.queryAsync(spql.q_rsc_likes, initBindings={'rsc': rscUri}) %}
+
+{{ social.social_post_render(post) }}
+
+<form width="100%">
+  <textarea maxlength="1024" id="comment" name="textarea" width="800" rows="5"></textarea>
+  <p align="center"><button class="p-button" onclick="reply('{{ rscUri }}')">Reply</button>
+  <button class="p-button" onclick="window.location.reload()">Reload</button>
+  </p>
+</form>
+
+<div id="replies">
+{% for post in replies|reverse %}
+{{ social.social_post_render(post) }}
+{% endfor %}
+</div>
+
+<script>
+  function reply(rsc) {
+    let body = document.getElementById('comment').value
+
+    if (body.length === 0) {
+      alert('Empty message')
+      return
+    }
+
+    window.g_pronto.ontoloCreateObjectAuto({
+      '@type': 'DwebSocialPost',
+      'about': {
+        '@type': 'DwebSocialPost',
+        '@id': rsc
+      },
+      'articleBody': body
+      }, {}).then(function(res) {
+        window.location.reload(true)
+      })
+  }
+</script>
+{% endblock %}

@@ -1,0 +1,27 @@
+envs:
+  default:
+    widgets:
+      gToolButton:
+        defaultIconSize: 16
+
+      gMediumToolButton:
+        defaultIconSize: 24
+      gSmallToolButton:
+        defaultIconSize: 16
+      gLargeToolButton:
+        defaultIconSize: 32
+
+      #
+      # Configuration for the dock with pyramids and status
+      #
+      dockCraftingZone:
+        toolbarPyramids:
+          visible: False
+          iconSize: 32
+
+          # Unused for now
+          maxActionsPerRow: 12
+
+        toolbarAppStatus:
+          visible: True
+          iconSize: 24

@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <style>
+      body {
+        background-color: lightgrey;
+      }
+
+      .narrow {
+        width: 0px;
+      }
+
+      .padding {
+        margin: 100px;
+      }
+
+      .listing {
+        background-color: #bfbfbf;
+        border-radius: 4px;
+        border: 1px solid grey;
+        margin-top: 5px;
+        margin-left: 20px;
+        margin-right: 10px;
+        padding: 10px;
+      }
+
+      .panel-heading {
+        padding-bottom: 20px;
+      }
+
+      #header {
+        background: #000;
+      }
+
+      #logo {
+        height: 25px;
+        margin: 10px;
+      }
+
+      .ipfs-entry {
+        padding-left: 5px;
+        padding-right: 15px;
+      }
+
+      .ipfs-icon {
+        width: 16px;
+      }
+
+      .ipfs-file {
+        background-image:url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAAmhJREFUeNpsUztv01AYPfdhOy/XTZ80VV1VoCqlA2zQqUgwMEErWBALv4GJDfEDmOEHsFTqVCTExAiiSI2QEKJKESVFFBWo04TESRzfy2c7LY/kLtf2d8+555zvM9NaI1ora5svby9OnbUEBxgDlIKiWjXQeLy19/X17sEtcPY2rtHS96/Hu0RvXXLz+cUzM87zShsI29DpHCYt4E6Box4IZzTnbDx7V74GjhOSfwgE0H2638K9h08A3iHGVbjTw7g6YmAyw/BgecHNGGJjvfQhIfmfIFDAXJpjuugi7djIFVI4P0plctgJQ0xnFe5eOO02OwEp2VkhSCnC8WOCdqgwnzFx4/IyppwRVN+XYXsecqZA1pB48ekAnw9/4GZx3L04N/GoTwEjX4cNH5vlPfjtAIYp8cWrQutxrC5Mod3VsXVTMFSqtaE+gl9dhaUxE2tXZiF7nYiiatJ3v5s8R/1yOCNLOuwjkELiTbmC9dJHpIaGASsDkoFQGJQwHWMcHWJYOmUj1OjvQotuytt5nHMLEGkCyx6QU384jwkUAd2sxJbS/QShZtg/8rHzzQOzSaFhxQrA6YgQMQHojCUlgnCAAvKFBoXXaHfArSCZDE0gyWJgFIKmvUFKO4MUNIk2a4+hODtDUVuJ/J732AKS6ZtImdTyAQQB3bZN8l9t75IFh0JMUdVKsohsUPqRgnka0tYgggYpCHkKGTsHI5NOMojB4iTICCepvX53AIEfQta1iUCmoTiBmdEri2RgddKFhuJoqb/af/yw/d3zTNM6UkaOfis62aUgddAbnz+rXuPY+Vnzjt9/CzAAbmLjCrfBiRgAAAAASUVORK5CYII=');
+        background-repeat:no-repeat;
+        background-size:contain;
+      }
+
+      .ipfs-gif {
+        background-image: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAAmVJREFUeNp0U0tPE1EU/trplAqlL0laiw40xASByEJIZFGVnSvj1j+gWxNXJq7VrbrwF7h10cSNhMRHojEuACVBKmH6SJQyJeXRxzzv9dyZPiCtN5lMe8853znf953xcc4hztDzZ1+C6fQMHAfd4/MBFG+p6h/n4OAeAoGNToi/eOm+A50LKRaLh6amoty2vVpZdotNXccMEK3LwZxa2bsDSdrAqePv/mLM5tSdMwYBYqyvw9zdhUn/L59P4OGtG8qlZCoH254/DdCdQBCxqZu+ugqnWoW9swN5ehp2NotgIo6bGQWGtaS8+vQ5V9a0u5S+1gfABEilAqdUgm98HDwUQkDT8JXoPPq+BoM5kCYmFT9jryn1+hkAt7heBx8dhbSwACmTAUwTgdlZ/CVKJaLnI1GD8TikZiPSR8Gxib8chH95mZTxgwWHwH7+gFMswqcokIRbjMO2HDCnZ1VvArpjEmnKZc8+cZJJYGsLsMiZ8AgwEqaY6Mb6RQR33JFhGECzCRyfAFXNu9v+RVNRZWIMuDJNuYMAaDycUFGhCOgtuAtFVDA83G5A8TrFDw+F5QMAxAKJJxz2xnW3RPJGbm+rCyjotZetH4DGzaSSeDA3h4Zl4R0JOEZWTpIzF4n/m995bNdqZwB6m0gFft3Ak6vz+KYWwFsGlqIxXItEcDt1ARMEtKdVgZb+fwA0G2C2hXM0ZTZNRcSf0b1pmXi7uYnjI+Lfanm5fRQsK8BIxKcrK7i/uIgP+Tw+FlREqHN5fx/vyU4uHBE6UO4gDWqk/JFaLuMxcXeFk6TuJ90V0HOk1in7J8AAjmgkPfjU+isAAAAASUVORK5CYII=');
+        background-repeat:  no-repeat;
+        background-size: contain;
+      }
+      .ipfs-html {
+        background-image: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAAmBJREFUeNqEUktPE1EU/mY605a+hhZTBNKRDApNrWIRA4nEBUZdmCgLNi4MK5f+FNdu3bFv1J1EXODCR1JJSMTwpqUP6NiCpe10Zjz3hj5Mm3iSybl37jnf+c53jmDbNpi9eb+6Ftcisea909bWNzNb6dwzSXKkhIt/r14+515qBqmDA8HpqKagh53XaopblpIbe+knDpFAhPab2Dw0TKvRK7lmNODzePBgZlK9oUWSpmVNdpIU8T+jaMsyMaD4MDcZVa+NhJMN00w0n6V2nN3yQgdHWZag+LzYPTomIAtT0THVtPGanmb/BbjwLFkvn2IttYGYplKyDzsHh7gdmyAWfh5zVq0Guhg4RAHFUhmfvq3j134aXo8bd+ITnMFOOovU5jbGRoZwNxFn1cxuAIcDW/sZDjA/c4u+BNxOJyxqaenpI3z88gMfPn9Hv98HQZS6RazW6kjExvFi8TGdDSy/W0Emf4LS6R8sv11BmfzSwkPcm74Jo9Ei0GZgmkw8QCOao8OXcaz/5vSZnPdnp3ApqBBLkWJE0Ci7ASzbIhCLLQ1E0iOkBDh9NpUgiUejo8oNuJwyn0YPABtn51UYFFivG3yBGCNZkuDtc/MW+ZQI3OrYpBaARCKufk3B5XIiWyhiL5ODp8+FfFHH+KiKSqWKUL8fC/NznGlPBmz+24dZjKnD0CJDcMoyW0SqXuMtHBFw7rhIAD1ErNUNafxKBNevapwu65NpEQ4FqXIA+RMd6VwBP3cPSERb6gLIFIq61+UqGWaFdcrVt/lmAuWjAi2aiMFwmOYuIJ/N6M28vwIMAMoNDyg4rcU9AAAAAElFTkSuQmCC');
+        background-repeat:  no-repeat;
+        background-size: contain;
+      }
+
+      .ipfs-directory {
+        background-image: url('data:image/png;base64,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');
+        background-repeat:  no-repeat;
+        background-size: contain;
+      }
+
+    </style>
+    <title>IPFS directory index: {{ path }}</title>
+  </head>
+
+  <body>
+    <div id="header" class="row">
+    </div>
+    <br/>
+    <div class="listing">
+      <div class="panel panel-default">
+        <div class="panel-heading">
+          <strong>Index of {{ path }}</strong>
+        </div>
+        <table class="table table-striped">
+          <tr>
+            <td class="narrow">
+              <div class="ipfs-icon ipfs-file">&nbsp;</div>
+            </td>
+            <td class="padding">
+              <a href="..">..</a>
+            </td>
+            <td></td>
+          </tr>
+
+  {% for lnk in links %}
+          <tr>
+            <td class="ipfs-entry">
+  {% if lnk['Type'] == 2 %}
+              <div class="ipfs-icon ipfs-file">&nbsp;</div>
+  {% else %}
+              <div class="ipfs-icon ipfs-directory">&nbsp;</div>
+  {% endif %}
+            </td>
+
+            <td>
+                <a href="{{ lnk['href'] }}">{{ lnk['Name'] }}</a>
+            </td>
+  {% if lnk['Type'] == 2 %}
+            <td>{{ lnk['Size'] |filesizeformat(true) }}</td>
+  {% endif %}
+          </tr>
+  {% endfor %}
+        </table>
+
+      </div>
+    </div>
+  </body>
+</html>

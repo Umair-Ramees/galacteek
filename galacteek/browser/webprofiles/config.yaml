@@ -1,0 +1,92 @@
+envs:
+  default:
+    defaultWebProfile: 'ipfs'
+
+    # Web profiles definition
+    webProfiles:
+      anonymous:
+        descr: Anonymous profile
+
+        settings:
+          javascript:
+            enabled: False
+
+          cacheType: 'nocache'
+          cookiesPolicy: 'deny'
+          offTheRecord: True
+
+        contexts:
+          tor:
+            settings:
+              javascript:
+                enabled: False
+
+      minimal:
+        descr: Minimal profile
+        storageName: 'minimal'
+
+        settings:
+          plugins: False
+
+      ipfs:
+        descr: IPFS profile
+        storageName: 'ipfs'
+
+        settings:
+          accelerated2dCanvas: True
+
+        scripts:
+          - type: 'builtin'
+            name: 'js-ipfs-client'
+
+      web3:
+        descr: Web3 profile
+        storageName: 'web3'
+
+        settings:
+          accelerated2dCanvas: True
+
+        scripts:
+          - type: 'builtin'
+            name: 'js-ipfs-client'
+          - type: 'builtin'
+            name: 'ethereum-web3'
+
+      defaultProfile:
+        descr: Default profile
+
+        settings:
+          fullScreenSupport: True
+          plugins: True
+          localStorage: True
+          pdfViewerInternal: False
+          localContentCanAccessRemoteUrls: False
+          webGL: True
+          accelerated2dCanvas: False
+          focusOnNavigation: True
+          allowGeolocationOnInsecureOrigins: False
+
+          minFontSize: 14
+          defaultFontSize: 14
+
+          xssAuditing: False
+          cacheType: 'nocache'
+          cookiesPolicy: 'allow'
+          offTheRecord: False
+
+          javascript:
+            enabled: True
+            canOpenWindows: False
+            canAccessClipboard: False
+            allowWindowActivation: False
+
+        scripts:
+          - type: 'qrc'
+            path: ':/share/js/jquery-3.6.0.js'
+            name: 'jquery'
+
+        fonts:
+          standard: 'Inter UI'
+          fixed: 'Inter UI'
+          serif: 'Verdana'
+          sansSerif: 'Verdana'

@@ -1,0 +1,102 @@
+{% include "ld/lib/actions.jinja2" %}
+
+<html>
+  <head>
+    <script src="qrc:///qtwebchannel/qwebchannel.js"></script>
+    <script src="qrc:///share/js/jquery-3.6.0.min.js"></script>
+    <link rel="stylesheet" href="qrc:///share/static/css/water.css">
+
+    <style>
+      body {
+        background-color: #323232;
+        font: 12pt "Montserrat";
+        color: white;
+      }
+
+      a {
+        color: #fe921f;
+        text-decoration: underline;
+        font-size: 14pt;
+      }
+
+      a:hover {
+        color: #ffffff;
+      }
+
+      h1, h2, h3 {
+        color: lightsteelblue;
+      }
+
+      pre {
+        white-space: pre-wrap;
+        white-space: -moz-pre-wrap;
+        white-space: -pre-wrap;
+        white-space: -o-pre-wrap;
+        word-wrap: break-word;
+      }
+      textarea {
+        width: 50%;
+        min-width: 300px;
+        min-height: 100px;
+      }
+
+      .bubble1 {
+        background-color:#e3f7fc;
+        color:#555;
+        border: 1px solid;
+        border-color: #8ed9f6;
+        border-color: darkorange;
+        border-radius:5px;
+        font-size:1.0em;
+        padding:2px 2px 2px 2px;
+        margin:8px;
+        cursor: default;
+      }
+      .bubble-yellow { background: #fff8c4; border-color: #f7deae; }
+      .alignleft {
+        float: left;
+      }
+      .alignright {
+        float: right;
+      }
+
+      .msger {
+        display: flex;
+        flex-flow: column wrap;
+        justify-content: space-between;
+        width: 100%;
+        height: 100%;
+        background: var(--msger-bg);
+        box-shadow: 0 15px 15px -5px rgba(0, 0, 0, 0.2);
+      }
+
+    </style>
+
+    <meta charset="UTF-8">
+    <title>{{ rscUri }}</title>
+
+    <script type="text/javascript">
+      new QWebChannel(qt.webChannelTransport, function (channel) {
+        window.g_pronto = channel.objects.g_pronto;
+        window.g_ipid = channel.objects.g_ipid;
+        window.g_sparql = channel.objects.g_sparql;
+
+        window.g_ipid.did().then(function(did) {
+          window.g_ipid.serviceEndpointCompact(did, '/passport').then(function(pass) {
+            window.passport = pass
+          })
+        })
+      })
+    </script>
+
+  </head>
+  <body>
+    <header>
+    </header>
+
+    <div class="page">
+      {% block body %}
+      {% endblock %}
+    </div>
+  </body>
+</html>

@@ -1,0 +1,7 @@
+envs:
+  default:
+
+    # URL schemes configuration
+    schemes:
+      ipfsNative:
+        reqTimeout: 240

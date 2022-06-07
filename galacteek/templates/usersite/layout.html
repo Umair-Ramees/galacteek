@@ -1,0 +1,50 @@
+{% from "usersite/macros/urls.html" import site_ipns_url %}
+{% from "usersite/macros/urls.html" import public_ipns_url %}
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <title>
+            {{ profile.userInfo.spaceHandle.short }}'s dweb page
+        </title>
+        <link rel="stylesheet" type="text/css"
+                   href="{{ site_ipns_url(siteIpns, 'assets/css/style.css') }}" />
+        <link rel="stylesheet" type="text/css"
+                   href="{{ site_ipns_url(siteIpns, 'assets/css/pygments.css') }}" />
+        <link rel="alternate" type="application/atom+xml"
+             title="Atom feed"
+             href="{{ site_ipns_url(siteIpns, 'dfeed.atom') }}"/>
+    </head>
+    <body>
+        <header>
+            <nav>
+            <ul class="banner">
+                <li>
+                    <a href="{{ site_ipns_url(siteIpns, 'blog/index.html') }}">Blog</a>
+                </li>
+                <li>
+                    <a href="{{ site_ipns_url(siteIpns, 'about.html') }}">About</a>
+                </li>
+                <li>
+                    <a href="{{ site_ipns_url(siteIpns, 'dfeed.atom') }}"
+                       title="Distributed Atom Feed">
+                        <img width="16" height="16"
+                            src="{{ site_ipns_url(siteIpns, 'media/images/atom-feed.png') }}"/>
+                    </a>
+                </li>
+                <li>
+                    <a href="{{ public_ipns_url(siteIpns, 'dfeed.publicgw.atom') }}"
+                       title="Distributed Atom Feed (gatewayed, usable with any feed reader)">
+                        <img width="16" height="16"
+                            src="{{ site_ipns_url(siteIpns, 'media/images/atom-feed.png') }}"/>
+                    </a>
+                </li>
+            </ul>
+            </nav>
+        </header>
+
+        <div class="page">
+            {% block body %}
+            {% endblock %}
+        </div>
+    </body>
+</html>

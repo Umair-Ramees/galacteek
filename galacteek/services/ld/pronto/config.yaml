@@ -1,0 +1,177 @@
+graphEnvs:
+  # Graphs definitions
+  # ipg = interplanetary graph, g = galacteek
+  beta:
+    # Pubsub service config
+    pubsub:
+      heartbeat:
+        intervalMin: 90
+        intervalMax: 220
+
+    mSyncThrottler:
+      rateLimit: 12
+      period: 60
+      retryInterval: 2.0
+
+    # Graph guardians
+    guardians:
+      # Goliath (default)
+      urn:ipg:guardians:goliath:
+        rules:
+          - subject: '^did:ipid:.*'
+            action:
+              do: 'upgrade'
+          - subject: '^i:/.*Person/'
+            action:
+              do: 'upgrade'
+
+          - subject: '^.*$'
+            predicate: 'http://www.w3.org/1999/02/22-rdf-syntax-ns#type'
+            object: 'ips://galacteek.ld/FollowAction'
+            action:
+              do: 'trigger'
+              call: 'followSubject'
+
+          - subject: '^.*$'
+            predicate: 'http://www.w3.org/1999/02/22-rdf-syntax-ns#type'
+            object: 'ips://galacteek.ld/UnfollowAction'
+            action:
+              do: 'trigger'
+              call: 'unfollowSubject'
+
+          - subject: '^urn:vc:captcha3auth'
+            predicate: 'ips://galacteek.ld/issuer'
+            object: 'did:ipid:.*'
+            action:
+              do: 'trigger'
+              call: 'captchaVcProcess'
+
+    # Graph synchronizers definitions
+    synchronizers:
+      urn:ipg:sync:xmlgzexport:
+        type: rdfexport
+        format: xml
+        compression: gzip
+
+      urn:ipg:sync:ttlgzexport:
+        type: rdfexport
+        format: ttl
+        compression: gzip
+
+      urn:ipg:sync:sparql:hashmarksbylibrarian1:
+        type: sparql
+        run:
+          - query: >
+              PREFIX hmark: <ips://galacteek.ld/Hashmark#>
+
+              CONSTRUCT {
+                ?uri ?p ?o .
+              } WHERE {
+                ?uri ?p ?o .
+                ?uri hmark:librarianId ?libId .
+                <@REMOTE_PEER_URIREF@> gs:usesLibrarianId ?libId .
+              }
+
+            contentType: text/turtle
+            action: merge
+
+      urn:ipg:sync:ontolochain1:
+        type: ontolochain
+
+    graphs:
+      # i (conjunctive)
+      urn:ipg:i:
+        name: i
+        type: conjunctive
+        guardian: urn:ipg:guardians:goliath
+
+        namespace: 'urn:ipg:i'
+
+        subgraphs:
+          urn:ipg:i:i0:
+            name: i_i0
+          urn:ipg:i:i1:
+            name: i_i1
+
+          urn:ipg:i:articles:
+            name: i_articles
+
+          urn:ipg:i:uni:
+            name: i_uni
+
+          urn:ipg:i:uni:mw:ss:earth:rings:
+            name: i_uni_mw_ss_earth_rings
+
+        services:
+          sparql:
+            exportsAllow: true
+
+      urn:ipg:h0:
+        name: h0
+
+        services:
+          sparql:
+            exportsAllow: true
+
+          sync:
+            use: 'urn:ipg:sync:ontolochain1'
+
+      urn:ipg:icapsules:registries:
+        type: conjunctive
+
+        name: icapsules_registries
+        guardian: urn:ipg:guardians:goliath
+
+        subgraphs:
+          urn:ipg:icapsules:registries:default:
+            name: icapsules_registries_default
+
+          urn:ipg:icapsules:registries:local:
+            name: icapsules_registries_local
+
+          urn:ipg:icapsules:registries:galacteek:purple:
+            name: icapsules_registries_galacteek_purple
+
+          urn:ipg:icapsules:registries:galacteek:purple:local:
+            name: icapsules_registries_galacteek_purple_local
+
+          urn:ipg:icapsules:registries:galacteek:blue:
+            name: icapsules_registries_galacteek_blue
+
+          urn:ipg:icapsules:registries:galacteek:blue:local:
+            name: icapsules_registries_galacteek_blue_local
+
+          urn:ipg:icapsules:registries:galacteek:red:
+            name: icapsules_registries_galacteek_red
+
+          urn:ipg:icapsules:registries:galacteek:red:local:
+            name: icapsules_registries_galacteek_red_local
+
+      # Hashmarks (conjunctive)
+      urn:ipg:hashmarks:
+        name: hashmarks
+        type: conjunctive
+
+        namespace: 'urn:ipg:hashmarks'
+
+        subgraphs:
+          urn:ipg:hashmarks:main:
+            name: hashmarks_main
+
+          urn:ipg:hashmarks:search:
+            name: hashmarks_search
+
+            services:
+              sparql: {}
+
+      # User's multimedia (conjunctive)
+      urn:ipg:user:multimedia:
+        name: user_multimedia
+        type: conjunctive
+
+        subgraphs:
+          urn:ipg:user:multimedia:playlists:
+            name: user_multimedia_playlists
+
+          urn:ipg:user:multimedia:playlists:public:
+            name: user_multimedia_playlists_public

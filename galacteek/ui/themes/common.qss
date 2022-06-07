@@ -1,0 +1,125 @@
+@font-face {
+    font-family: 'Montserrat';
+    font-style: normal;
+    font-weight: 400;
+    src: url('qrc:/share/static/fonts/Montserrat-Regular.woff2') format('woff2');
+}
+
+@font-face {
+    font-family: 'Inter UI';
+    font-style:  normal;
+    font-weight: 400;
+    src: url('qrc:/share/static/fonts/Inter-UI-Medium.woff2') format('woff2');
+}
+
+@font-face {
+    font-family: 'Segoe UI';
+    src: url('qrc:/share/static/fonts/SegoeUI.woff2') format('woff2');
+    font-weight: normal;
+    font-style: normal;
+}
+
+* {
+    font: 13pt "Segoe UI";
+}
+
+QMainWindow::separator:horizontal {
+    width: 0px;
+    height: 0px;
+}
+
+QMainWindow::separator:vertical {
+    width: 0px;
+    height: 0px;
+}
+
+
+QTreeView::item, QListView::item, QTreeWidget::item, QListWidget::item
+{
+    font-size: 14pt;
+}
+
+QTreeView::item:selected, QListView::item:selected, QTreeWidget::item:selected, QListWidget::item:selected
+{
+    font-size: 16pt;
+}
+
+/* Common toolbar config */
+
+QToolBar#mainToolBar QToolButton {
+    min-width: 32px;
+    min-height: 32px;
+}
+
+QToolBar#qaToolBar[dropping=true] QToolButton {
+    qproperty-iconSize: 64px;
+}
+
+QToolBar#qaToolBar[dropping=false] QToolButton {
+    qproperty-iconSize: 32px;
+}
+
+QToolBar#qaToolBar QToolButton[hovering=true] {
+    qproperty-iconSize: 64px;
+}
+
+QToolBar#qaToolBar QToolButton[hovering=false] {
+    qproperty-iconSize: 32px;
+}
+
+QToolBar#qaToolBar QToolButton {
+    margin: 0;
+    padding: 2px;
+}
+
+QToolBar#qaToolBar QToolButton::hover {
+    padding: 5px;
+}
+
+QToolButton#pinObjectButton {
+    qproperty-iconSize: 48px;
+}
+
+/*
+QToolButton#pinObjectButton QMenu::icon {
+    width: 64px;
+    height: 64px;
+}
+
+QToolButton#pinObjectButton QMenu {
+    icon-size: 64px;
+}
+
+
+QToolButton#pinObjectButton QMenu::item {
+    icon-size: 64px;
+    background: transparent;
+}
+*/
+
+QToolButton#pinObjectButton::hover {
+    qproperty-iconSize: 64px;
+    min-width: 64px;
+    min-height: 64px;
+}
+
+QDockWidget#dockCrafting {
+    padding: 0;
+    margin: 0;
+}
+
+QMenu#hashmarksMgrMenu {
+    font: 14pt "Segoe UI";
+}
+
+QLineEdit#urlZone {
+    margin-left: 8px;
+    padding: 5px;
+    font: 14pt "Segoe UI";
+    min-height: 40x;
+}
+
+QLabel#rpsPinataInstructions {
+    margin: 10px;
+    font: 16pt "Segoe UI";
+}

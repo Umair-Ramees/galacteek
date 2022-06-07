@@ -1,0 +1,178 @@
+#!/bin/bash
+#
+# AppImage builder with Miniconda3
+#
+# You need to run "make dists" before running the script
+#
+
+echo "Building AppImage for version: ${G_VERSION}"
+echo "AppImage destination: $APPIMAGE_PATH"
+
+# APPDIR="galacteek.AppDir.${G_VERSION}"
+APPDIR=/galacteek/appdir
+APPIPIP=$APPDIR/usr/bin/pip
+WHEEL=../dist/galacteek-$G_VERSION-py3-none-any.whl
+
+if ! [ -e $WHEEL ]; then
+    echo "Wheel for version $G_VERSION does not exist, run make dists"
+    exit 1
+fi
+
+mkdir -p $APPDIR/usr/share/applications
+mkdir -p $APPDIR/usr/share/licenses/galacteek
+mkdir -p $APPDIR/usr/share/metainfo
+mkdir -p $APPDIR/usr/share/icons/hicolor/512x512/apps
+
+export PATH="$PATH:$APPDIR/usr/bin"
+
+# Enter the venv
+. "$APPDIR"/usr/bin/activate
+
+$APPIPIP install --upgrade pip
+$APPIPIP install wheel
+
+# Conda extra packages
+# conda install -y -c conda-forge pycairo
+
+# Install the wheel from local dists
+
+echo "Installing wheel: $WHEEL"
+$APPIPIP install --force-reinstall -r ../requirements.txt
+$APPIPIP install $WHEEL
+$APPIPIP install $WHEEL'[markdown-extensions]'
+# $APPIPIP install $WHEEL'[matplotlib]'
+
+# Pyqt dependencies
+$APPIPIP install $WHEEL'[ui-pyqt-5.15]'
+
+cp ../{COPYING,LICENSE,LICENSE.go-ipfs,LICENSE.Qt.GPLv3} \
+	$APPDIR/usr/share/licenses/galacteek
+cp ../galacteek.desktop $APPDIR/usr/share/applications
+cp ../galacteek.desktop $APPDIR
+cp ../galacteek.appdata.xml $APPDIR/usr/share/metainfo
+cp ../share/icons/galacteek.png $APPDIR
+cp ../share/icons/galacteek.png $APPDIR/io.gitlab.galacteek.Galacteek.png
+cp ../share/icons/galacteek.png $APPDIR/usr/share/icons/hicolor/512x512/apps
+
+find /usr/lib -iname 'libzbar.so*' -exec cp -av {} $APPDIR/usr/lib \;
+find /usr/lib -iname 'libjpeg.so*' -exec cp -av {} $APPDIR/usr/lib \;
+
+# Custom magic db
+mkdir -p $APPDIR/usr/share/file
+wget -O $APPDIR/usr/share/file/magic-galacteek.mgc \
+    https://gitlab.com/galacteek/file/-/releases/continuous-galacteek/downloads/magic.mgc
+
+# Copy go-ipfs and fs-repo-migrations
+cp /usr/bin/ipfs $APPDIR/usr/bin
+cp /usr/bin/fs-repo-migrations $APPDIR/usr/bin
+
+# Copy tor and dependencies
+cp /usr/bin/tor $APPDIR/usr/bin
+find /usr/lib -iname 'libevent-2.1.so*' -exec cp -av {} $APPDIR/usr/lib \;
+find /usr/lib -iname 'libcrypto.so*' -exec cp -av {} $APPDIR/usr/lib \;
+find /lib -iname 'libsystemd.so*' -exec cp -av {} $APPDIR/usr/lib \;
+find /usr/lib -iname 'libssl.so*' -exec cp -av {} $APPDIR/usr/lib \;
+find /usr/lib -iname 'liblzma.so*' -exec cp -av {} $APPDIR/usr/lib \;
+find /usr/lib -iname 'libzstd.so*' -exec cp -av {} $APPDIR/usr/lib \;
+
+# QtMultimedia
+cp -av /usr/lib/x86_64-linux-gnu/libQt5MultimediaQuick.so.* $APPDIR/usr/lib
+
+# Copy notbit
+# cp notbit/src/notbit $APPDIR/usr/bin
+
+# pushd "$APPDIR"/usr/bin
+# ln -s ipfs-${GO_IPFS_VERSION} ipfs
+# ln -s notbit notbit-keygen
+# ln -s notbit notbit-sendmail
+# popd
+
+# Remove unnecessary stuff
+pushd "$APPDIR"/usr
+
+rm -rf pkgs
+find -type d -iname '__pycache__' -print0 | xargs -0 rm -r
+
+# Strip everything but the Pillow shared libs
+find . -type f -not \( -path ./lib/python3.7/site-packages/PIL -prune \) -o \
+	-name '*.so*' -print -exec strip '{}' \;
+find -type f -iname '*.a' -print -delete
+
+rm -rf lib/cmake/
+rm -rf include/
+rm -rf share/{gtk-,}doc
+rm -rf bin/tcl*
+rm -rf bin/lz*
+rm -rf bin/xz*
+rm -rf lib/libtcl*
+rm -rf lib/libtk*
+rm -rf lib/tk*
+rm -rf lib/tcl*
+rm -rf lib/python3.7/site-packages/Cryptodome/SelfTest/*
+rm -rf lib/python3.7/site-packages/PyQt5/Qt/plugins/geoservices
+rm -rf lib/python3.7/site-packages/PyQt5/Qt/plugins/sceneparsers
+rm -rf lib/python3.7/site-packages/pyzbar/tests
+rm -rf lib/python3.7/turtledemo/
+rm -rf lib/python3.7/tkinter/
+rm -rf lib/python3.7/lib2to3/
+rm -rf lib/python3.7/idlelib
+rm -rf lib/python3.7/site-packages/git/test
+rm -rf lib/python3.7/site-packages/conda_package_handling
+rm -rf lib/python3.7/ensurepip
+rm -rf lib/python3.7/site-packages/{setuptools,pip}
+rm -rf share/man
+rm -rf share/readline
+rm -rf share/terminfo
+rm -rf share/info
+rm -rf ssl/man
+rm -f lib/libstdc++*
+
+# Remove xcb libs according to the excludelist
+rm -f lib/libxcb-dri2.so*
+rm -f lib/libxcb-dri3.so*
+rm -f lib/libxcb.so*
+
+# Remove libcairo (use the system version otherwise it breaks gstreamer)
+rm -f lib/libcairo.so*
+
+# QT
+TSL_PATH=./lib/python3.7/site-packages/PyQt5/Qt5/translations
+find $TSL_PATH -type f -not -iname "*en*" -a -not -iname "*es*" \
+	-a -not -iname "*fr*" -exec rm {} \;
+
+QTWEB_TS_PATH=./lib/python3.7/site-packages/PyQt5/Qt5/translations/qtwebengine_locales
+find $QTWEB_TS_PATH -type f -not -iname "*en*" -a -not -iname "*es*" \
+	-a -not -iname "*fr*" -exec rm {} \;
+
+rm -rf lib/python3.7/site-packages/PyQt5/Qt5/plugins/sqldrivers
+# rm -rf lib/python3.7/site-packages/PyQt5/Qt5/plugins/geoservices
+rm -rf lib/python3.7/site-packages/PyQt5/Qt5/plugins/assetimporters
+
+rm -rf lib/python3.7/site-packages/PyQt5/Qt5/lib/libQt5XmlPatterns*
+rm -rf lib/python3.7/site-packages/PyQt5/Qt5/lib/libQt5Designer*
+# find lib/python3.7/site-packages/PyQt5/Qt5/qml/ -name *.qml -exec rm {} \;
+# find lib/python3.7/site-packages/PyQt5/Qt5/qml/ -name *.qmlc -exec rm {} \;
+# find lib/python3.7/site-packages/PyQt5/Qt5/qml/QtQuick -exec rm {} \;
+rm -rf lib/python3.7/site-packages/PyQt5/Qt5/qml/QtCharts/designer/images
+# rm -rf lib/python3.7/site-packages/PyQt5/Qt5/qml/Qt/labs
+# rm -rf lib/python3.7/site-packages/PyQt5/Qt5/qml/QtQuick3D/
+
+python3 -m compileall lib/python3.7/site-packages/galacteek
+
+popd
+
+# Copy the AppRun
+
+cp AppRun $APPDIR/AppRun
+chmod 755 $APPDIR/AppRun
+
+sed -i -e "s/@@COMMIT_SHA@@/${CI_COMMIT_SHA}/" $APPDIR/AppRun
+
+sed -i -e 's/#\!\/.*$/#!\/usr\/bin\/python3/' $APPDIR/usr/bin/galacteek
+sed -i -e 's/#\!\/.*$/#!\/usr\/bin\/python3/' $APPDIR/usr/bin/mkdocs
+
+wget https://github.com/AppImage/AppImageKit/releases/download/continuous/appimagetool-x86_64.AppImage
+chmod +x appimagetool*.AppImage
+
+echo "AppDir successfully created, running appimagetool: $APPIMAGE_PATH"
+ARCH=x86_64 ./appimagetool-x86_64.AppImage -n $APPDIR $APPIMAGE_PATH
