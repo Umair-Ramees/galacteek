@@ -1,4 +1,4 @@
-from PyQt5.QtCore import QSettings 
+from PyQt5.QtCore import QSettings  
 
 # Settings sections
 CFG_SECTION_IPFSD = 'ipfsdaemon'
