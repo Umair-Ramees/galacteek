@@ -30,7 +30,7 @@ else:
 
 
 appStarter = None
-
+ 
  
 class ApplicationStarter:
     def __init__(self, args):
