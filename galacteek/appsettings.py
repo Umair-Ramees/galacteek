@@ -16,7 +16,7 @@ CFG_SECTION_URLSCHEME_IPFS = 'urlscheme_ipfs'
 CFG_SECTION_URLSCHEME_ENS = 'urlscheme_ens'
 
 CFG_KEY_ENABLED = 'enabled'
-
+ 
 # These keys are for ipfsdaemon and ipfsconn sections
 CFG_KEY_APIPORT = 'apiport'
 CFG_KEY_SWARMPORT = 'swarmport'
