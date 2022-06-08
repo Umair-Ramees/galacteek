@@ -1,4 +1,4 @@
-# Galacteek, GUI startup entry point
+# Galacteek, GUI startup entry point 
 
 import argparse
 import faulthandler
