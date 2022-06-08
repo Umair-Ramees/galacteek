@@ -2,7 +2,7 @@ import asyncio
 import attr
 from galacteek import log
 from galacteek.services import GService
-from galacteek.core.ps import makeKeySmartContract
+from galacteek.core.ps import makeKeySmartContract 
 from galacteek.core.ps import gHub
 from web3 import Account
 
